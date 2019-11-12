@@ -1,13 +1,11 @@
 package self.yang.location
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.location.Location
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Looper
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.location.*
 
 class MainActivity : AppCompatActivity() {
@@ -82,7 +80,6 @@ class MainActivity : AppCompatActivity() {
 
         longitudeTextView.text = location?.longitude.toString()
         latitudeTextView.text = location?.latitude.toString()
-
     }
 
 }
