@@ -1,21 +1,21 @@
 package self.yang.location
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.os.Looper
 import android.view.View
-import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 
 class MainActivity : AppCompatActivity() {
 
     // Create location services client
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationRequest: LocationRequest
+    private lateinit var locationCallback: LocationCallback
 
     companion object {
         // 位置权限
@@ -26,17 +26,40 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
+
+        //  create an instance of the Fused Location Provider Client
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        // 本地位置设置
+        locationRequest = LocationRequest.create()?.apply {
+            interval = 1000
+            fastestInterval = 1000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }!!
+
+        // 定义位置信息更新回调
+        // 一体化位置信息提供器会调用 LocationCallback.onLocationResult() 回调方法。
+        // 传入参数包含 Location 对象列表，其中包含位置的纬度和经度。
+        // 以下代码段展示了如何实现 LocationCallback 接口并定义该方法，然后获取位置信息更新的时间戳，并在应用的界面上显示纬度、经度和时间戳：
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                locationResult ?: return
+                handleLocation(locationResult.lastLocation)
+            }
+        }
+
+        this.showNewLocation()
     }
 
     // 刷新位置信息
     fun refreshLocation(view: View) {
-        updateLocation()
+        showNewLocation()
     }
 
     /**
-     * 更新位置信息
+     * 展示最新位置信息
      */
-    private fun updateLocation() {
+    private fun showNewLocation() {
         // 检测是否拥有位置相关权限
         requestPermissions(
             arrayOf(
@@ -46,19 +69,20 @@ class MainActivity : AppCompatActivity() {
             ), LOCATION_PERMISSION
         )
 
-        //  create an instance of the Fused Location Provider Client
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
         // Get the last known location
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-
-            var locationTextView = findViewById<TextView>(R.id.location)
-
-            var longitude = location?.longitude
-            var latitude = location?.latitude
-
-            locationTextView.text = "经度：$longitude \n纬度：$latitude"
+            handleLocation(location)
         }
+    }
+
+    // 展示位置信息
+    private fun handleLocation(location: Location?) {
+        var longitudeTextView = findViewById<TextView>(R.id.longitude)
+        var latitudeTextView = findViewById<TextView>(R.id.latitude)
+
+        longitudeTextView.text = location?.longitude.toString()
+        latitudeTextView.text = location?.latitude.toString()
+
     }
 
 }
