@@ -3,6 +3,7 @@ package self.yang.location
 import android.Manifest
 import android.location.Location
 import android.os.Bundle
+import android.os.Looper
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         // 本地位置设置
         locationRequest = LocationRequest.create()?.apply {
             interval = 1000
-            fastestInterval = 1000
+            fastestInterval = 1
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }!!
 
@@ -46,7 +47,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        this.showNewLocation()
+        // this.showNewLocation()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.myLooper() /* Looper */
+        )
+
     }
 
     // 刷新位置信息
