@@ -1,5 +1,6 @@
 package self.yang.location
 
+import android.Manifest
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.widget.TextView
@@ -8,6 +9,7 @@ import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationListener
 import com.amap.api.maps.AMap
+import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.MapView
 import com.amap.api.maps.model.MyLocationStyle
 
@@ -25,6 +27,24 @@ class GaodeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gaode)
 
+        // 检测是否拥有位置相关权限
+        requestPermissions(
+            arrayOf(
+                Manifest.permission.BLUETOOTH_ADMIN,
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.INTERNET,
+                Manifest.permission.CHANGE_WIFI_STATE,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            ), MainActivity.LOCATION_PERMISSION
+        )
+
         //初始化定位
         mLocationClient = AMapLocationClient(getApplicationContext());
 
@@ -34,6 +54,10 @@ class GaodeActivity : AppCompatActivity() {
                 if (aMapLocation.getErrorCode() == 0) {
                     //解析定位结果
                     handleLocation(aMapLocation)
+                } else {
+                    var gaodeTextView = findViewById<TextView>(R.id.gaodeTextView)
+
+                    gaodeTextView.text = aMapLocation.getErrorCode().toString()
                 }
             }
         }
@@ -55,16 +79,20 @@ class GaodeActivity : AppCompatActivity() {
     }
 
     private fun setMap() {
-        //初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
-        // 连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
+        //设置地图的放缩级别
+        aMap?.moveCamera(CameraUpdateFactory.zoomTo(13F));
+
+        //初始化定位蓝点样式类
         var myLocationStyle = MyLocationStyle()
+        // 连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
         //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
-        myLocationStyle?.interval(2000)
+        myLocationStyle?.interval(1000)
+        //设置是否显示定位小蓝点，用于满足只想使用定位，不想使用定位小蓝点的场景，设置false以后图面上不再有定位蓝点的概念，但是会持续回调位置信息。
+        myLocationStyle?.showMyLocation(true)
 
         //设置定位蓝点的Style
         aMap?.setMyLocationStyle(myLocationStyle)
-        //设置默认定位按钮是否显示，非必需设置。
-        //aMap.getUiSettings().setMyLocationButtonEnabled(true);
         // 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
         aMap?.setMyLocationEnabled(true)
     }

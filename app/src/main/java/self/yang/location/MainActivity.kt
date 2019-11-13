@@ -26,6 +26,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // 检测是否拥有位置相关权限
+        requestPermissions(
+            arrayOf(
+                Manifest.permission.BLUETOOTH_ADMIN,
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.INTERNET,
+                Manifest.permission.CHANGE_WIFI_STATE,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            ), LOCATION_PERMISSION
+        )
+
         //  create an instance of the Fused Location Provider Client
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -90,15 +108,6 @@ class MainActivity : AppCompatActivity() {
      * 展示最新位置信息
      */
     private fun showNewLocation() {
-        // 检测是否拥有位置相关权限
-        requestPermissions(
-            arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            ), LOCATION_PERMISSION
-        )
-
         // Get the last known location
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             handleLocation(location)
