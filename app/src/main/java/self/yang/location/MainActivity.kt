@@ -6,6 +6,7 @@ import android.location.Location
 import android.os.Bundle
 import android.os.Looper
 import android.view.View
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.location.*
@@ -25,6 +26,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // 隐藏状态栏
+        window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         // 检测是否拥有位置相关权限
         requestPermissions(

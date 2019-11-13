@@ -3,6 +3,7 @@ package self.yang.location
 import android.Manifest
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.amap.api.location.AMapLocation
@@ -26,6 +27,9 @@ class GaodeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gaode)
+
+        // 隐藏状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         // 检测是否拥有位置相关权限
         requestPermissions(
