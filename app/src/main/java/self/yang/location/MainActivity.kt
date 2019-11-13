@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
 
         //  create an instance of the Fused Location Provider Client
