@@ -61,6 +61,19 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        stopLocationUpdates()
+    }
+
+    /**
+     * 要停止位置信息更新
+     */
+    private fun stopLocationUpdates() {
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
+
     // 刷新位置信息
     fun refreshLocation(view: View) {
         showNewLocation()
@@ -90,8 +103,13 @@ class MainActivity : AppCompatActivity() {
         var longitudeTextView = findViewById<TextView>(R.id.longitude)
         var latitudeTextView = findViewById<TextView>(R.id.latitude)
 
-        longitudeTextView.text = location?.longitude.toString()
-        latitudeTextView.text = location?.latitude.toString()
+        var longitude = location?.longitude.toString()
+        var latitude = location?.latitude.toString()
+
+        longitudeTextView.text = longitude
+        latitudeTextView.text = latitude
+
+        //Log.d("Main Activity", "current location is $longitude $latitude")
     }
 
 }
