@@ -37,9 +37,9 @@ class GaodeActivity : AppCompatActivity() {
         }
 
         //设置定位回调监听
-        mLocationClient!!.setLocationListener(mLocationListener);
+        mLocationClient?.setLocationListener(mLocationListener);
 
-        mLocationClient!!.startLocation()
+        mLocationClient?.startLocation()
 
         //获取地图控件引用
         mMapView = findViewById<MapView>(R.id.map);
@@ -77,12 +77,12 @@ class GaodeActivity : AppCompatActivity() {
 
     // 展示位置信息
     private fun handleLocation(aMapLocation: AMapLocation?) {
-        var longitudeTextView = findViewById<TextView>(R.id.gaodeTextView)
+        var gaodeTextView = findViewById<TextView>(R.id.gaodeTextView)
 
-        var longitude = aMapLocation!!.longitude
-        var latitude = aMapLocation.latitude
+        var longitude = aMapLocation?.longitude
+        var latitude = aMapLocation?.latitude
 
-        longitudeTextView.text = "$longitude $latitude"
+        gaodeTextView.text = "$longitude $latitude"
     }
 
 }
