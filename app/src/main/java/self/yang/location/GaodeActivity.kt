@@ -135,4 +135,5 @@ class GaodeActivity : AppCompatActivity() {
         gaodeTextView.text = "$longitude $latitude"
     }
 
+
 }
