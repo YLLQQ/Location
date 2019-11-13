@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 build/
+release/
+
