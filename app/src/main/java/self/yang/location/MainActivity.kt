@@ -1,6 +1,7 @@
 package self.yang.location
 
 import android.Manifest
+import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
@@ -77,6 +78,13 @@ class MainActivity : AppCompatActivity() {
     // 刷新位置信息
     fun refreshLocation(view: View) {
         showNewLocation()
+    }
+
+    // 访问高德ativity
+    fun gotoGaode(view: View) {
+        var intent = Intent(this, GaodeActivity::class.java)
+
+        startActivity(intent)
     }
 
     /**
