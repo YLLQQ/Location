@@ -52,12 +52,5 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     // Kotlin 的话用kapt
     kapt "androidx.room:room-compiler:$room_version"
-    // 如果需要用到 rxjava
-    implementation "androidx.room:room-rxjava2:$room_version"
-    // 如果需要用到 guava
-    implementation "androidx.room:room-guava:$room_version"
-    // 需要用到相关测试工具的话
-    testImplementation "androidx.room:room-testing:$room_version"
-
 
 }

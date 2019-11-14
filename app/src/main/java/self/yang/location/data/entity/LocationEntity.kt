@@ -7,11 +7,13 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "location")
 data class LocationEntity(
     @PrimaryKey(autoGenerate = true) var id: Int?,
-
     @ColumnInfo(name = "longitude") var longitude: Double?,
-
     @ColumnInfo(name = "latitude") var latitude: Double?
+) {
+    override fun toString(): String {
+        return "$id, $longitude, $latitude"
+    }
+}
 
-)
 
 

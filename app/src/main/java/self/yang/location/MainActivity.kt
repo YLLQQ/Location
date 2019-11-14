@@ -8,11 +8,14 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
+import android.widget.ArrayAdapter
+import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.location.*
 import self.yang.location.data.config.AppDatabase
 import self.yang.location.data.entity.LocationEntity
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -56,8 +59,8 @@ class MainActivity : AppCompatActivity() {
 
         // 本地位置设置
         locationRequest = LocationRequest.create()?.apply {
-            interval = 1000
-            fastestInterval = 1
+            interval = 100000
+            fastestInterval = 5000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }!!
 
@@ -71,6 +74,27 @@ class MainActivity : AppCompatActivity() {
                 handleLocation(locationResult.lastLocation)
             }
         }
+
+        Thread(Runnable {
+
+            kotlin.run {
+                var locationList =
+                    AppDatabase.getInstance(applicationContext).locationDao().loadAllLocation()
+
+                val adapter =
+                    ArrayAdapter(
+                        this@MainActivity,
+                        android.R.layout.simple_list_item_1,
+                        locationList
+                    )
+
+                var locationListView = findViewById<ListView>(R.id.locationListView)
+
+                locationListView.adapter = adapter
+            }
+
+
+        }).start()
 
         // this.showNewLocation()
     }
@@ -136,7 +160,8 @@ class MainActivity : AppCompatActivity() {
 
         Thread(Runnable {
             kotlin.run {
-                var locationEntity = LocationEntity(null, longitude.toDouble(), latitude.toDouble())
+                var locationEntity =
+                    LocationEntity(null, longitude.toDouble(), latitude.toDouble())
 
                 AppDatabase.getInstance(applicationContext).locationDao()
                     .insertLocation(locationEntity)
