@@ -17,7 +17,7 @@ interface LocationDao {
     /**
      * 查询所有位置数据
      */
-    @Query("SELECT * FROM location order by id desc")
+    @Query("SELECT * FROM location order by id desc limit 10")
     fun loadAllLocation(): Array<LocationEntity>
 
 

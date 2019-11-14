@@ -4,7 +4,9 @@ import android.Manifest
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
+import android.os.Message
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
@@ -23,10 +25,31 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
+    private lateinit var locationListView: ListView
 
     companion object {
         // 位置权限
         internal const val LOCATION_PERMISSION = 1
+    }
+
+    /**
+     * 刷新位置列表
+     */
+    private var refreshLocationListViewHandler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+
+            var obj = msg.obj as Array<LocationEntity>
+
+            val adapter =
+                ArrayAdapter(
+                    applicationContext,
+                    android.R.layout.simple_list_item_1,
+                    obj
+                )
+
+            locationListView.adapter = adapter
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,26 +98,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        Thread(Runnable {
-
-            kotlin.run {
-                var locationList =
-                    AppDatabase.getInstance(applicationContext).locationDao().loadAllLocation()
-
-                val adapter =
-                    ArrayAdapter(
-                        this@MainActivity,
-                        android.R.layout.simple_list_item_1,
-                        locationList
-                    )
-
-                var locationListView = findViewById<ListView>(R.id.locationListView)
-
-                locationListView.adapter = adapter
-            }
-
-
-        }).start()
+        locationListView = findViewById<ListView>(R.id.locationListView)
 
         // this.showNewLocation()
     }
@@ -167,8 +171,24 @@ class MainActivity : AppCompatActivity() {
                     .insertLocation(locationEntity)
 
                 Log.d("Main Activity", "insert location success")
+
+                var locationList =
+                    AppDatabase.getInstance(applicationContext).locationDao().loadAllLocation()
+
+                Log.d("Main Activity", "list is $locationList")
+
+                for (locationEntity in locationList) {
+                    Log.d("Main Activity", "location is $locationEntity")
+                }
+
+                var message = Message.obtain()
+
+                message.obj = locationList
+
+                refreshLocationListViewHandler.sendMessage(message)
             }
         }).start()
     }
+
 
 }
