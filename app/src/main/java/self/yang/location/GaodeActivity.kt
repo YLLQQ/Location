@@ -107,8 +107,8 @@ class GaodeActivity : AppCompatActivity() {
         //设置是否显示定位小蓝点，用于满足只想使用定位，不想使用定位小蓝点的场景，设置false以后图面上不再有定位蓝点的概念，但是会持续回调位置信息。
         myLocationStyle?.showMyLocation(true)
         //设置定位蓝点的icon图标方法，需要用到BitmapDescriptor类对象作为参数。
-//        myLocationStyle?.myLocationIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(
-//            resources,R.drawable.flag)))
+        //myLocationStyle?.myLocationIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(
+        //resources,R.drawable.flag)))
 
         //设置定位蓝点的Style
         aMap?.myLocationStyle = myLocationStyle
