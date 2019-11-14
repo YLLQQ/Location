@@ -1,14 +1,11 @@
 package self.yang.location
 
 import android.Manifest
-import android.graphics.Bitmap
-import android.icu.text.SimpleDateFormat
+import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.os.Environment
 import android.os.PersistableBundle
 import android.view.WindowManager
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
@@ -16,11 +13,10 @@ import com.amap.api.location.AMapLocationListener
 import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.MapView
+import com.amap.api.maps.model.BitmapDescriptorFactory
+import com.amap.api.maps.model.LatLng
+import com.amap.api.maps.model.MarkerOptions
 import com.amap.api.maps.model.MyLocationStyle
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
-import java.util.*
 
 
 class GaodeActivity : AppCompatActivity() {
@@ -90,6 +86,9 @@ class GaodeActivity : AppCompatActivity() {
         mLocationClient?.startLocation()
     }
 
+    /**
+     * 设置地图样式
+     */
     private fun setMap() {
         //设置地图的放缩级别
         aMap?.moveCamera(CameraUpdateFactory.zoomTo(13F));
@@ -106,58 +105,48 @@ class GaodeActivity : AppCompatActivity() {
 //        myLocationStyle?.myLocationIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(
 //            resources,R.drawable.flag)))
 
-        //地图截屏功能
-        aMap?.getMapScreenShot(object : AMap.OnMapScreenShotListener {
-            override fun onMapScreenShot(p0: Bitmap?) {
-            }
-
-            override fun onMapScreenShot(bitmap: Bitmap?, status: Int) {
-                var sdf = SimpleDateFormat("yyyyMMddHHmmss");
-                if (null == bitmap) {
-                    return;
-                }
-                try {
-                    var fos = FileOutputStream(
-                        Environment.getRootDirectory().absoluteFile.path + "/test_" + sdf.format(
-                            Date()
-                        ) + ".png"
-                    );
-                    var b = bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-
-                    try {
-                        fos.flush();
-                    } catch (e: IOException) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        fos.close();
-                    } catch (e: IOException) {
-                        e.printStackTrace();
-                    }
-                    var buffer = StringBuffer();
-
-                    if (b)
-                        buffer.append("截屏成功 ");
-                    else {
-                        buffer.append("截屏失败 ");
-                    }
-                    if (status != 0)
-                        buffer.append("地图渲染完成，截屏无网格");
-                    else {
-                        buffer.append("地图未渲染完成，截屏有网格");
-                    }
-                    Toast.makeText(applicationContext, buffer.toString(), Toast.LENGTH_SHORT).show()
-
-                } catch (e: FileNotFoundException) {
-                    e.printStackTrace();
-                }
-            }
-        })
-
         //设置定位蓝点的Style
         aMap?.myLocationStyle = myLocationStyle
         // 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
         aMap?.isMyLocationEnabled = true
+
+        initMarker()
+    }
+
+    /**
+     * 初始化标记点
+     */
+    private fun initMarker() {
+        // 我的老家
+        var sxz = LatLng(33.066929, 112.839609)
+
+        addMarker(sxz, "我的老家");
+
+        // 琼琼老家
+        var xw = LatLng(34.464351, 110.909972)
+
+        addMarker(xw, "琼琼老家")
+    }
+
+    /**
+     * 增加标记点信息
+     */
+    private fun addMarker(latLng: LatLng, title: String) {
+        val markerOption = MarkerOptions()
+
+        markerOption.position(latLng)
+        markerOption.title(title)
+        markerOption.draggable(true)//设置Marker可拖动
+        markerOption.icon(
+            BitmapDescriptorFactory.fromBitmap(
+                BitmapFactory
+                    .decodeResource(resources, android.R.drawable.presence_online)
+            )
+        )
+        // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+        markerOption.isFlat = true//设置marker平贴地图效果
+
+        aMap?.addMarker(markerOption)
     }
 
     override fun onPause() {
