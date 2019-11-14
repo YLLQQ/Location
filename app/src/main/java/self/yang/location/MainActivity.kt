@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        locationListView = findViewById<ListView>(R.id.locationListView)
+        locationListView = findViewById(R.id.locationListView)
 
         // this.showNewLocation()
     }
