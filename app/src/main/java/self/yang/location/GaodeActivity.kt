@@ -2,6 +2,7 @@ package self.yang.location
 
 import android.Manifest
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.WindowManager
@@ -13,10 +14,7 @@ import com.amap.api.location.AMapLocationListener
 import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.MapView
-import com.amap.api.maps.model.BitmapDescriptorFactory
-import com.amap.api.maps.model.LatLng
-import com.amap.api.maps.model.MarkerOptions
-import com.amap.api.maps.model.MyLocationStyle
+import com.amap.api.maps.model.*
 
 
 class GaodeActivity : AppCompatActivity() {
@@ -27,6 +25,13 @@ class GaodeActivity : AppCompatActivity() {
     //高德地图视图
     var mMapView: MapView? = null
     var aMap: AMap? = null
+
+    companion object {
+        // 我的老家
+        var sxz = LatLng(33.066929, 112.839609)
+        // 琼琼老家
+        var xw = LatLng(34.464351, 110.909972)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,7 +101,7 @@ class GaodeActivity : AppCompatActivity() {
         //初始化定位蓝点样式类
         var myLocationStyle = MyLocationStyle()
         // 连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
         //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
         myLocationStyle?.interval(1000)
         //设置是否显示定位小蓝点，用于满足只想使用定位，不想使用定位小蓝点的场景，设置false以后图面上不再有定位蓝点的概念，但是会持续回调位置信息。
@@ -111,20 +116,36 @@ class GaodeActivity : AppCompatActivity() {
         aMap?.isMyLocationEnabled = true
 
         initMarker()
+
+        val latLngs = ArrayList<LatLng>()
+
+        latLngs.add(sxz)
+        latLngs.add(xw)
+
+        createLine(latLngs)
+    }
+
+    /**
+     * 根据经纬度绘制线
+     */
+    private fun createLine(latLngs: ArrayList<LatLng>) {
+        aMap?.addPolyline(
+            PolylineOptions().addAll(latLngs).geodesic(true).width(1f).color(
+                Color.argb(
+                    255,
+                    1,
+                    1,
+                    1
+                )
+            )
+        )
     }
 
     /**
      * 初始化标记点
      */
     private fun initMarker() {
-        // 我的老家
-        var sxz = LatLng(33.066929, 112.839609)
-
         addMarker(sxz, "我的老家");
-
-        // 琼琼老家
-        var xw = LatLng(34.464351, 110.909972)
-
         addMarker(xw, "琼琼老家")
     }
 
