@@ -1,10 +1,14 @@
 package self.yang.location
 
 import android.Manifest
+import android.graphics.Bitmap
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
+import android.os.Environment
 import android.os.PersistableBundle
 import android.view.WindowManager
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
@@ -13,6 +17,10 @@ import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.MapView
 import com.amap.api.maps.model.MyLocationStyle
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
+import java.util.*
 
 
 class GaodeActivity : AppCompatActivity() {
@@ -94,11 +102,62 @@ class GaodeActivity : AppCompatActivity() {
         myLocationStyle?.interval(1000)
         //设置是否显示定位小蓝点，用于满足只想使用定位，不想使用定位小蓝点的场景，设置false以后图面上不再有定位蓝点的概念，但是会持续回调位置信息。
         myLocationStyle?.showMyLocation(true)
+        //设置定位蓝点的icon图标方法，需要用到BitmapDescriptor类对象作为参数。
+//        myLocationStyle?.myLocationIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(
+//            resources,R.drawable.flag)))
+
+        //地图截屏功能
+        aMap?.getMapScreenShot(object : AMap.OnMapScreenShotListener {
+            override fun onMapScreenShot(p0: Bitmap?) {
+            }
+
+            override fun onMapScreenShot(bitmap: Bitmap?, status: Int) {
+                var sdf = SimpleDateFormat("yyyyMMddHHmmss");
+                if (null == bitmap) {
+                    return;
+                }
+                try {
+                    var fos = FileOutputStream(
+                        Environment.getRootDirectory().absoluteFile.path + "/test_" + sdf.format(
+                            Date()
+                        ) + ".png"
+                    );
+                    var b = bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+
+                    try {
+                        fos.flush();
+                    } catch (e: IOException) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        fos.close();
+                    } catch (e: IOException) {
+                        e.printStackTrace();
+                    }
+                    var buffer = StringBuffer();
+
+                    if (b)
+                        buffer.append("截屏成功 ");
+                    else {
+                        buffer.append("截屏失败 ");
+                    }
+                    if (status != 0)
+                        buffer.append("地图渲染完成，截屏无网格");
+                    else {
+                        buffer.append("地图未渲染完成，截屏有网格");
+                    }
+                    Toast.makeText(applicationContext, buffer.toString(), Toast.LENGTH_SHORT).show()
+
+                } catch (e: FileNotFoundException) {
+                    e.printStackTrace();
+                }
+            }
+        })
 
         //设置定位蓝点的Style
-        aMap?.setMyLocationStyle(myLocationStyle)
+        aMap?.myLocationStyle = myLocationStyle
         // 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
-        aMap?.setMyLocationEnabled(true)
+        aMap?.isMyLocationEnabled = true
     }
 
     override fun onPause() {
@@ -114,6 +173,10 @@ class GaodeActivity : AppCompatActivity() {
 
         //在activity执行onDestroy时执行mMapView.onDestroy()，销毁地图
         mMapView?.onDestroy()
+
+        if (null != mLocationClient) {
+            mLocationClient?.onDestroy();
+        }
     }
 
     override fun onResume() {
