@@ -5,11 +5,14 @@ import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.location.*
+import self.yang.location.data.config.AppDatabase
+import self.yang.location.data.entity.LocationEntity
 
 class MainActivity : AppCompatActivity() {
 
@@ -130,6 +133,17 @@ class MainActivity : AppCompatActivity() {
         latitudeTextView.text = latitude
 
         //Log.d("Main Activity", "current location is $longitude $latitude")
+
+        Thread(Runnable {
+            kotlin.run {
+                var locationEntity = LocationEntity(null, longitude.toDouble(), latitude.toDouble())
+
+                AppDatabase.getInstance(applicationContext).locationDao()
+                    .insertLocation(locationEntity)
+
+                Log.d("Main Activity", "insert location success")
+            }
+        }).start()
     }
 
 }
