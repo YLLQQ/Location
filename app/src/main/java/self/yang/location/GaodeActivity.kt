@@ -75,16 +75,6 @@ class GaodeActivity : AppCompatActivity() {
             }
         }
 
-        ////获取地图控件引用
-        //mMapView = findViewById<MapView>(R.id.map);
-        ////在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
-        //mMapView?.onCreate(savedInstanceState)
-        //
-        //if (aMap == null) {
-        //    aMap = mMapView?.getMap();
-        //    setMap();
-        //}
-
         //设置定位回调监听
         mLocationClient?.setLocationListener(mLocationListener);
 
@@ -103,9 +93,9 @@ class GaodeActivity : AppCompatActivity() {
         // 连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
         //myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
         //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
-        myLocationStyle?.interval(1000)
+        myLocationStyle!!.interval(1000)
         //设置是否显示定位小蓝点，用于满足只想使用定位，不想使用定位小蓝点的场景，设置false以后图面上不再有定位蓝点的概念，但是会持续回调位置信息。
-        myLocationStyle?.showMyLocation(true)
+        myLocationStyle!!.showMyLocation(true)
         //设置定位蓝点的icon图标方法，需要用到BitmapDescriptor类对象作为参数。
         //myLocationStyle?.myLocationIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(
         //resources,R.drawable.flag)))
