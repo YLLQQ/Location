@@ -132,8 +132,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     // 访问高德ativity
-    fun gotoGaode(view: View) {
-        var intent = Intent(this, GaodeActivity::class.java)
+    fun gotoGaodeMap(view: View) {
+        var intent = Intent(this, GaoDeMapActivity::class.java)
+
+        startActivity(intent)
+    }
+
+    // 访问高德ativity
+    fun gotoGaodeLocation(view: View) {
+        var intent = Intent(this, GaoDeLocationActivity::class.java)
 
         startActivity(intent)
     }
