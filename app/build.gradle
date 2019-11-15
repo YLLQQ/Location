@@ -7,6 +7,19 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+
+    signingConfigs {
+        release {
+            storeFile file('../keys/gaode.jks')
+            storePassword 'android'
+            keyAlias 'gaode'
+            keyPassword 'android'
+
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
@@ -30,29 +43,20 @@ android {
         }
     }
 
-    signingConfigs {
-        release {
-            storeFile file("../keys/gaode.jks")
-            storePassword "android"
-            keyAlias "gaode"
-            keyPassword "android"
-        }
-    }
-
     buildTypes {
         release {
             // 不显示Log
             buildConfigField "boolean", "LOG_DEBUG", "false"
-            //混淆
-            minifyEnabled true
             //Zipalign优化
-            zipAlignEnabled true
+            zipAlignEnabled false
             // 移除无用的resource文件
-            shrinkResources true
-            //加载默认混淆配置文件
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            shrinkResources false
             //签名
             signingConfig signingConfigs.release
+            //混淆
+            minifyEnabled false
+            //加载默认混淆配置文件
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
