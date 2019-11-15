@@ -17,6 +17,10 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        ndk {
+            abiFilters "armeabi-v7a"
+        }
+
         multiDexEnabled true
         //指定room.schemaLocation生成的文件路径
         javaCompileOptions {
@@ -69,7 +73,7 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.2.1'
     annotationProcessor 'androidx.room:room-compiler:2.2.1'
 
-    def room_version = "2.1.0-alpha02"
+    def room_version = "2.2.1"
     implementation "androidx.room:room-runtime:$room_version"
     // Kotlin 的话用kapt
     kapt "androidx.room:room-compiler:$room_version"

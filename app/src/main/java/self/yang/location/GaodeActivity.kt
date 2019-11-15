@@ -75,15 +75,15 @@ class GaodeActivity : AppCompatActivity() {
             }
         }
 
-        //获取地图控件引用
-        mMapView = findViewById<MapView>(R.id.map);
-        //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
-        mMapView?.onCreate(savedInstanceState)
-
-        if (aMap == null) {
-            aMap = mMapView?.getMap();
-            setMap();
-        }
+        ////获取地图控件引用
+        //mMapView = findViewById<MapView>(R.id.map);
+        ////在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
+        //mMapView?.onCreate(savedInstanceState)
+        //
+        //if (aMap == null) {
+        //    aMap = mMapView?.getMap();
+        //    setMap();
+        //}
 
         //设置定位回调监听
         mLocationClient?.setLocationListener(mLocationListener);
