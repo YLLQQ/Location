@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.ArrayAdapter
@@ -164,22 +163,16 @@ class MainActivity : AppCompatActivity() {
 
         Thread(Runnable {
             kotlin.run {
-                var locationEntity =
-                    LocationEntity(null, longitude.toDouble(), latitude.toDouble())
-
-                AppDatabase.getInstance(applicationContext).locationDao()
-                    .insertLocation(locationEntity)
-
-                Log.d("Main Activity", "insert location success")
+                //var locationEntity =
+                //    LocationEntity(null, longitude.toDouble(), latitude.toDouble())
+                //
+                //AppDatabase.getInstance(applicationContext).locationDao()
+                //    .insertLocation(locationEntity)
+                //
+                //Log.d("Main Activity", "insert location success")
 
                 var locationList =
                     AppDatabase.getInstance(applicationContext).locationDao().loadAllLocation()
-
-                Log.d("Main Activity", "list is $locationList")
-
-                for (locationEntity in locationList) {
-                    Log.d("Main Activity", "location is $locationEntity")
-                }
 
                 var message = Message.obtain()
 

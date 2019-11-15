@@ -101,7 +101,7 @@ class GaodeActivity : AppCompatActivity() {
         //初始化定位蓝点样式类
         var myLocationStyle = MyLocationStyle()
         // 连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
+        //myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
         //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
         myLocationStyle?.interval(1000)
         //设置是否显示定位小蓝点，用于满足只想使用定位，不想使用定位小蓝点的场景，设置false以后图面上不再有定位蓝点的概念，但是会持续回调位置信息。
