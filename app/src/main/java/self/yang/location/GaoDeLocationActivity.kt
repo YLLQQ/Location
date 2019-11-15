@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationListener
-import com.amap.api.maps.model.LatLng
 
 
 class GaoDeLocationActivity : AppCompatActivity() {
@@ -15,13 +14,6 @@ class GaoDeLocationActivity : AppCompatActivity() {
     //声明AMapLocationClient类对象
     var mLocationClient: AMapLocationClient? = null
     var mLocationListener: AMapLocationListener? = null
-
-    companion object {
-        // 我的老家
-        var sxz = LatLng(33.066929, 112.839609)
-        // 琼琼老家
-        var xw = LatLng(34.464351, 110.909972)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
