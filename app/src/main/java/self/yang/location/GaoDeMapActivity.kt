@@ -36,7 +36,7 @@ class GaoDeMapActivity : AppCompatActivity() {
             ), MainActivity.LOCATION_PERMISSION
         )
 
-        val mapView = findViewById(R.id.map) as MapView
+        val mapView = findViewById<MapView>(R.id.map)
 
         mapView.onCreate(savedInstanceState)// 此方法必须重写
 
