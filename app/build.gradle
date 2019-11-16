@@ -60,6 +60,16 @@ android {
         }
     }
 
+    android.applicationVariants.all {
+        variant ->
+            variant.outputs.all { output ->
+                if (output.outputFile != null && output.outputFile.name.endsWith('.apk') &&
+                        'release' == variant.buildType.name) {
+                    //输出文件名
+                    outputFileName = "location_${variant.versionName}_${buildTime()}.apk"
+                }
+            }
+    }
 }
 
 dependencies {
@@ -82,4 +92,10 @@ dependencies {
     // Kotlin 的话用kapt
     kapt "androidx.room:room-compiler:$room_version"
 
+}
+
+//当前时间
+def static buildTime() {
+    def date = new Date()
+    return date.format("yyyyMMdd")
 }
